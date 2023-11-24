@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 @Builder
 @Entity
 @Table(name = "currencies")
-public class Currency {
+public class Currency implements Serializable {
     @Id
     private Long numCode;
     private String charCode;

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.telegram.cbrexchangebot.dto.CurrencyCbrDto;
-import org.telegram.cbrexchangebot.model.RateShort;
+import org.telegram.cbrexchangebot.model.Rate;
 import org.telegram.cbrexchangebot.service.CbrClient;
 import org.telegram.cbrexchangebot.service.RateService;
 
@@ -26,7 +26,7 @@ public class Controller {
     }
 
     @GetMapping("/currency")
-    public RateShort test2(@RequestParam String currencyCode) {
+    public Rate test2(@RequestParam String currencyCode) {
         return rateService.getRate(currencyCode);
     }
 }

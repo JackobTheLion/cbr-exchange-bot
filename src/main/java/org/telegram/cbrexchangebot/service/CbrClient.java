@@ -3,6 +3,7 @@ package org.telegram.cbrexchangebot.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
@@ -22,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,8 +40,8 @@ public class CbrClient {
                 .build();
     }
 
-    public List<CurrencyCbrDto> getExchangeRates() {
-        String url = "/scripts/XML_daily.asp?date_req=23/11/2023";
+    public List<CurrencyCbrDto> getExchangeRates(@Nullable LocalDate date) {
+        String url = getUrl(date);
 
         String xml = rest.getForEntity(url, String.class).getBody();
         List<CurrencyCbrDto> rates = new ArrayList<>();
@@ -59,7 +61,7 @@ public class CbrClient {
                     Element element = (Element) node;
 
                     CurrencyCbrDto rate = CurrencyCbrDto.builder()
-                            .numCode(element.getElementsByTagName("NumCode").item(0).getTextContent())
+                            .numCode(Long.parseLong(element.getElementsByTagName("NumCode").item(0).getTextContent()))
                             .charCode(element.getElementsByTagName("CharCode").item(0).getTextContent())
                             .date(localDate)
                             .nominal(Integer.valueOf(element.getElementsByTagName("Nominal").item(0).getTextContent()))
@@ -81,6 +83,14 @@ public class CbrClient {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         Date date = dateFormat.parse(root.getAttribute("Date"));
         return LocalDate.ofInstant(date.toInstant(), ZoneId.of("Europe/Moscow"));
+    }
+
+    private String getUrl(LocalDate date) {
+        if (date != null) {
+            DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String text = date.format(formatters);
+            return "/scripts/XML_daily.asp?date_req=".concat(text);
+        } else return "/scripts/XML_daily.asp";
     }
 
     private double makeDouble(String s) {

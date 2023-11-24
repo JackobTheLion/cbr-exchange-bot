@@ -1,6 +1,5 @@
 package org.telegram.cbrexchangebot.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class CurrencyCbrDto {
-    private String numCode;
+    private Long numCode;
 
     private String charCode;
 

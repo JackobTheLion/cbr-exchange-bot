@@ -5,10 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
@@ -18,15 +16,19 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "rates")
 @IdClass(RatePK.class)
-public class Rate {
+public class Rate implements Serializable {
     @Id
     private Long numCode;
     @Id
     private LocalDate date;
 
+    @ManyToOne
+    @JoinColumn(name = "numCode", insertable = false, updatable = false)
+    private Currency currency;
+
     private Integer nominal;
 
-    private Double rate;
+    private Double value;
 
     private Double vunitRate;
 }
