@@ -25,9 +25,8 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	//implementation 'org.hibernate.orm:hibernate-core:4.3.0'
-	//implementation 'org.hibernate:hibernate-entitymanager:5.6.15.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.telegram:telegrambots:6.8.0'
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 	implementation 'com.h2database:h2'

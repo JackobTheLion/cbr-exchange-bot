@@ -11,9 +11,11 @@ import org.telegram.cbrexchangebot.model.Rate;
 import org.telegram.cbrexchangebot.repository.CurrencyRepository;
 import org.telegram.cbrexchangebot.repository.RateRepository;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,7 +40,7 @@ public class RateService {
         this.cbrClient = cbrClient;
         this.latestUpdate = initLatestUpdate(date);
         this.knownCurrencies = initCurrencies();
-        updateRates();
+        //updateRates();
     }
 
     public List<CurrencyCbrDto> getRates() { //TODO method marked for deletion
@@ -49,8 +51,18 @@ public class RateService {
     }
 
     public Rate getRate(String currencyCode) {
-        return rateRepository.findByDateAndCurrency(LocalDate.now(), currencyCode)
-                .orElseThrow(() -> new NoSuchRateException(String.format("Currency \"%s\" not found", currencyCode)));
+        log.info("Looking for currency '{}'", currencyCode);
+        return rateRepository.findByLatestRate(currencyCode.toUpperCase())
+                .orElseThrow(() -> {
+                    log.info("Currency '{}' not found", currencyCode);
+                    return new NoSuchRateException(String.format("Currency \"%s\" not found", currencyCode));
+                });
+    }
+
+    public List<String> getKnownCurrencies() {
+        List<String> currencies = new ArrayList<String>(knownCurrencies);
+        currencies.sort(String::compareTo);
+        return currencies;
     }
 
     private void saveRates(LocalDate date) {
@@ -63,7 +75,7 @@ public class RateService {
         log.info("Rates were updated.");
     }
 
-    @Scheduled(cron = "0 17 * * *")
+    @Scheduled(cron = "1 17 * * MON-FRI")
     private void autoRateUpdate() {
         log.warn("Auto update initialized at: {}.", LocalDateTime.now());
         saveRates(null);
@@ -99,7 +111,7 @@ public class RateService {
     private void updateRates() {
         LocalDate date = rateRepository.getLatestDate().orElse(latestUpdate);
         log.info("Latest rates available: {}.", date);
-        while (date.isBefore(LocalDate.now().plusDays(1))) {
+        while (date.isBefore(LocalDate.now().plusDays(1)) && date.getDayOfWeek() != DayOfWeek.SATURDAY) {
             saveRates(date);
             log.info("Rates updated for: {}.", date);
             date = date.plusDays(1);
