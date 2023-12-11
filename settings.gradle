@@ -6,3 +6,7 @@ pluginManagement {
 	}
 }
 rootProject.name = 'cbr-exchange-bot'
+
+include 'cbr-consumer'
+include 'cbr-producer'
+include 'cbr-web'
