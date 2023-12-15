@@ -1,0 +1,15 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER}
+
+org:
+  telegram:
+    cbrexchangebot:
+      token:
+      name:
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
