@@ -1,15 +1,10 @@
-package org.telegram.cbrexchangebot.service;
+package ru.yakovlev.cbrupdater.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.telegram.cbrexchangebot.dto.CurrencyCbrDto;
-import org.telegram.cbrexchangebot.exception.NoSuchRateException;
-import org.telegram.cbrexchangebot.model.Currency;
-import org.telegram.cbrexchangebot.model.Rate;
-import org.telegram.cbrexchangebot.repository.CurrencyRepository;
-import org.telegram.cbrexchangebot.repository.RateRepository;
+import ru.yakovlev.cbrupdater.repository.CurrencyRepository;
+import ru.yakovlev.cbrupdater.repository.RateRepository;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -20,8 +15,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.telegram.cbrexchangebot.mapper.CurrencyMapper.mapCurrencyFromDto;
-import static org.telegram.cbrexchangebot.mapper.RateMapper.mapRateFromDto;
 
 @Service
 @Slf4j
