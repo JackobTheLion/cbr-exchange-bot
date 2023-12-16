@@ -1,6 +1,5 @@
 package ru.yakovlev.cbrproducer.config;
 
-import jakarta.ws.rs.PUT;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.TopicConfig;
@@ -23,7 +22,7 @@ public class KafkaConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String servers;
 
-    public static String TOPIC_NAME = "telegram-message";
+    public final static String TOPIC_NAME = "telegram-message";
 
     public NewTopic telegramMessageTopic() {
         return TopicBuilder.name(TOPIC_NAME)

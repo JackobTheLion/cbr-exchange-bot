@@ -5,8 +5,8 @@ spring:
 org:
   telegram:
     cbrexchangebot:
-      token:
-      name:
+      token: 6757729128:AAE9rvw218gfydoitQbt50YRUcme6eimHak
+      name: CbrExcnageRateBot
 
 ---
 spring:
