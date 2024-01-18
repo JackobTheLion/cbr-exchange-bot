@@ -82,12 +82,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String knownCurrency : knownCurrencies) {
             InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
             inlineKeyboardButton.setText(knownCurrency);
-            inlineKeyboardButton.setCallbackData(knownCurrency);
             inlineKeyboardButtonQueue.add(inlineKeyboardButton);
         }
         while (!inlineKeyboardButtonQueue.isEmpty()) {
             List<InlineKeyboardButton> inlineKeyboardButtons = new ArrayList<>();
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 5; i++) {
                 InlineKeyboardButton poll = inlineKeyboardButtonQueue.poll();
                 if (poll == null) {
                     break;

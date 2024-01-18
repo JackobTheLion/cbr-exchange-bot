@@ -21,7 +21,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   kafka-ui:
     image: provectuslabs/kafka-ui
@@ -43,6 +43,17 @@ services:
       context: ./cbr-producer
       dockerfile: Dockerfile
     container_name: producer
+    environment:
+      KAFKA_SERVER: kafka:29092
+    depends_on:
+      - kafka
+
+  consumer:
+    image: consumer
+    build:
+      context: ./cbr-consumer
+      dockerfile: Dockerfile
+    container_name: consumer
     environment:
       KAFKA_SERVER: kafka:29092
     depends_on:

@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class BotConfig {
-    private final String botName = "test";
+    private final String botName = "CbrExchangeRateBot";
 
     public String getBotName() {
         return botName;
