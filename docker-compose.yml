@@ -58,3 +58,10 @@ services:
       KAFKA_SERVER: kafka:29092
     depends_on:
       - kafka
+
+  updater:
+    image: updater
+    build:
+      context: ./cbr-updater
+      dockerfile: Dockerfile
+    container_name: updater

@@ -117,8 +117,8 @@ public class RateService {
 
     @PostConstruct
     private void initKnownCurrenciesAndUpdateRates() {
-        updateRates();
-        initCurrencies();
+        warmCurrenciesCash();
+        updateRatesInDb();
     }
 
     /**
@@ -126,11 +126,15 @@ public class RateService {
      * Checks latest rates date in DB and if it is before then latestDate, updates it. <p>
      * If DB is empty latest date is considered as latest date set by settings.
      */
-    private void updateRates() {
+    private void updateRatesInDb() {
         LocalDate date = rateRepository.getLatestDate().orElse(latestUpdate);
         log.info("Latest rates available: {}.", date);
 
-        while (date.isBefore(LocalDate.now().plusDays(1)) && date.getDayOfWeek() != DayOfWeek.SATURDAY) {
+        while (date.isBefore(LocalDate.now())) {
+            if (date.getDayOfWeek() == DayOfWeek.SATURDAY) {
+                date = date.plusDays(1);
+                continue;
+            }
             getAndSaveRate(date);
             log.info("Rates updated for: {}.", date);
             date = date.plusDays(1);
@@ -141,7 +145,7 @@ public class RateService {
      * Caches existing currencies into memory in order to monitor new currencies which might be introduced by central
      * bank. Originally updated right after DB filling.
      */
-    private void initCurrencies() {
+    private void warmCurrenciesCash() {
         this.knownCurrencies = currencyRepository.findAll().stream().map(Currency::getCharCode)
                 .collect(Collectors.toSet());
     }

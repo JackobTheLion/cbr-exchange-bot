@@ -26,11 +26,12 @@ public class ProducerService extends TelegramLongPollingBot {
     @Autowired
     public ProducerService(@Value("${org.telegram.cbrexchangebot.token}") String botToken,
                            @Value("${org.telegram.cbrexchangebot.name}") String botUserName,
-                           KafkaTemplate<String, String> kafkaTemplate) {
+                           KafkaTemplate<String, String> kafkaTemplate,
+                           ObjectMapper objectMapper) {
         super(botToken);
         this.kafkaTemplate = kafkaTemplate;
         this.botUserName = botUserName;
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = objectMapper;
     }
 
 

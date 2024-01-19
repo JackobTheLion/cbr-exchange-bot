@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.cbrexchangebot.exception.NoSuchRateException;
+import org.telegram.cbrexchangebot.model.Currency;
 import org.telegram.cbrexchangebot.model.Rate;
+import org.telegram.cbrexchangebot.repository.CurrencyRepository;
 import org.telegram.cbrexchangebot.repository.RateRepository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -17,6 +19,8 @@ import java.util.List;
 public class RateService {
 
     private final RateRepository rateRepository;
+
+    private final CurrencyRepository currencyRepository;
 
     public Rate getRate(String currencyCode) {
         log.info("Looking for currency '{}'", currencyCode);
@@ -28,8 +32,9 @@ public class RateService {
     }
 
     public List<String> getKnownCurrencies() {
-        List<String> currencies = new ArrayList<>();
-        currencies.sort(String::compareTo);
-        return currencies;
+        return currencyRepository.findAll().stream()
+                .map(Currency::getCharCode)
+                .sorted(String::compareTo)
+                .collect(Collectors.toList());
     }
 }
